@@ -10,11 +10,12 @@ namespace web_app_repository
         private readonly MySqlConnection mySqlConnection;
         private static ConnectionMultiplexer redis;
 
-        public UsuarioRepository() {
+        public UsuarioRepository()
+        {
             string connectionString = "Server=localhost;Database=sys;User=root;Password=123;";
             mySqlConnection = new MySqlConnection(connectionString);
-
         }
+
         public async Task<IEnumerable<Usuario>> ListarUsarios()
         {
             await mySqlConnection.OpenAsync();
@@ -24,7 +25,9 @@ namespace web_app_repository
 
             return usuarios;
         }
-        public async Task SalvarUsario(Usuario usuario) {
+
+        public async Task SalvarUsario(Usuario usuario)
+        {
             await mySqlConnection.OpenAsync();
             string sql = "insert into usuarios(nome,email) values(@nome,@email);";
 
@@ -36,7 +39,9 @@ namespace web_app_repository
             IDatabase db = redis.GetDatabase();
             await db.KeyDeleteAsync(key);
         }
-        public async Task AtualizarUsuario(Usuario usuario) { 
+
+        public async Task AtualizarUsuario(Usuario usuario)
+        {
             await mySqlConnection.OpenAsync();
             string sql = "Update usuarios set Nome = @nome, Email = @email where Id=@id";
 
@@ -49,6 +54,7 @@ namespace web_app_repository
             IDatabase db = redis.GetDatabase();
             await db.KeyDeleteAsync(key);
         }
+
         public async Task RemoverUsuario(int id)
         {
             await mySqlConnection.OpenAsync();

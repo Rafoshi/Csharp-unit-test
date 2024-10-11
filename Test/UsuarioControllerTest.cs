@@ -88,5 +88,22 @@ namespace Test
 
             Assert.IsType<OkResult>(result);
         }
+
+        [Fact]
+        public async Task Delete_listarUsuariosOk()
+        {
+            //Falha pois o repositorio não esta separado do controller
+            Usuario usuario = new()
+            {
+                Email = "xxx@gmail.com",
+                Id = 1,
+                Nome = "Thiago xavier"
+            };
+
+            _userRepositoryMock.Setup(r => r.SalvarUsario(It.IsAny<Usuario>())).Returns(Task.CompletedTask);
+            var result = await _controller.Delete(1);
+
+            Assert.IsType<OkResult>(result);
+        }
     }
 }
