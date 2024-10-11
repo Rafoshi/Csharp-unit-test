@@ -10,7 +10,6 @@ namespace web_app_performance.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        private static ConnectionMultiplexer redis;
         private readonly IUsuarioRepository _repository;
 
         public UsuarioController(IUsuarioRepository repository)
@@ -34,11 +33,6 @@ namespace web_app_performance.Controllers
         {
             await _repository.SalvarUsario(usuario);
 
-            string key = "getusuario";
-            redis = ConnectionMultiplexer.Connect("localhost:6379");
-            IDatabase db = redis.GetDatabase();
-            await db.KeyDeleteAsync(key);
-
             return Ok();
         }
 
@@ -47,11 +41,6 @@ namespace web_app_performance.Controllers
         {
             await _repository.AtualizarUsuario(usuario);
 
-            string key = "getusuario";
-            redis = ConnectionMultiplexer.Connect("localhost:6379");
-            IDatabase db = redis.GetDatabase();
-            await db.KeyDeleteAsync(key);
-
             return Ok();
         }
 
@@ -59,11 +48,6 @@ namespace web_app_performance.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             await _repository.RemoverUsuario(id);
-
-            string key = "getusuario";
-            redis = ConnectionMultiplexer.Connect("localhost:6379");
-            IDatabase db = redis.GetDatabase();
-            await db.KeyDeleteAsync(key);
 
             return Ok();
         }

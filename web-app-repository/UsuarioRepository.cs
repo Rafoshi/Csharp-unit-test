@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using StackExchange.Redis;
 using MySqlConnector;
 using web_app_domain;
 
@@ -7,6 +8,7 @@ namespace web_app_repository
     public class UsuarioRepository : IUsuarioRepository
     {
         private readonly MySqlConnection mySqlConnection;
+        private static ConnectionMultiplexer redis;
 
         public UsuarioRepository() {
             string connectionString = "Server=localhost;Database=sys;User=root;Password=123;";
@@ -28,6 +30,11 @@ namespace web_app_repository
 
             await mySqlConnection.ExecuteAsync(sql, usuario);
             await mySqlConnection.CloseAsync();
+
+            string key = "getusuario";
+            redis = ConnectionMultiplexer.Connect("localhost:6379");
+            IDatabase db = redis.GetDatabase();
+            await db.KeyDeleteAsync(key);
         }
         public async Task AtualizarUsuario(Usuario usuario) { 
             await mySqlConnection.OpenAsync();
@@ -35,6 +42,12 @@ namespace web_app_repository
 
             await mySqlConnection.ExecuteAsync(sql, usuario);
             await mySqlConnection.CloseAsync();
+
+
+            string key = "getusuario";
+            redis = ConnectionMultiplexer.Connect("localhost:6379");
+            IDatabase db = redis.GetDatabase();
+            await db.KeyDeleteAsync(key);
         }
         public async Task RemoverUsuario(int id)
         {
@@ -43,6 +56,11 @@ namespace web_app_repository
 
             await mySqlConnection.ExecuteAsync(sql, new { id });
             await mySqlConnection.CloseAsync();
+
+            string key = "getusuario";
+            redis = ConnectionMultiplexer.Connect("localhost:6379");
+            IDatabase db = redis.GetDatabase();
+            await db.KeyDeleteAsync(key);
         }
 
     }

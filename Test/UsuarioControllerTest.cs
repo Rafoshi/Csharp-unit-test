@@ -69,8 +69,7 @@ namespace Test
             _userRepositoryMock.Setup(r => r.SalvarUsario(It.IsAny<Usuario>())).Returns(Task.CompletedTask);
             var result = await _controller.Post(usuario);
 
-            var okResult = Assert.IsType<OkObjectResult>(result);
-            Assert.Equal(usuario, okResult.Value);
+            Assert.IsType<OkResult>(result);
         }
 
         [Fact]
@@ -87,7 +86,7 @@ namespace Test
             _userRepositoryMock.Setup(r => r.AtualizarUsuario(usuario)).Returns(Task.CompletedTask);
             var result = await _controller.Put(usuario);
 
-            var okResult = Assert.IsType<OkObjectResult>(result);
+            Assert.IsType<OkResult>(result);
         }
     }
 }
