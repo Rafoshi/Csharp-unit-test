@@ -41,8 +41,6 @@ namespace web_app_performance.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Produto produto)
         {
-
-
             await _repository.SalvarProduto(produto);
 
             string key = "getproduto";
@@ -50,16 +48,12 @@ namespace web_app_performance.Controllers
             IDatabase db = redis.GetDatabase();
             await db.KeyDeleteAsync(key);
 
-
-
-
             return Ok();
         }
+
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Produto produto)
         {
-
-
             await _repository.AtualizarProduto(produto);
 
             string key = "getproduto";
@@ -67,24 +61,17 @@ namespace web_app_performance.Controllers
             IDatabase db = redis.GetDatabase();
             await db.KeyDeleteAsync(key);
 
-
-
-
             return Ok();
         }
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-
             await _repository.RemoverProduto(id);
 
             string key = "getproduto";
             redis = ConnectionMultiplexer.Connect("localhost:6379");
             IDatabase db = redis.GetDatabase();
             await db.KeyDeleteAsync(key);
-
-
-
 
             return Ok();
         }
