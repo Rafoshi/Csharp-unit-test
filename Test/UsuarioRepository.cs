@@ -12,9 +12,28 @@ namespace Test
         private readonly Mock<IUsuarioRepository> _userRepositoryMock;
         private readonly UsuarioController _controller;
 
-        public UsuarioRepository() {
+        public UsuarioRepository()
+        {
             _userRepositoryMock = new Mock<IUsuarioRepository>();
             _controller = new UsuarioController(_userRepositoryMock.Object);
+        }
+
+        [Fact]
+        public async Task Delete_UsuarioOk()
+        {
+            var usuario = new Usuario()
+            {
+                Email = "xxx@gmail.com",
+                Id = 1,
+                Nome = "Thiago xavier"
+            };
+
+            _userRepositoryMock.Setup(r => r.SalvarUsario(usuario)).Returns(Task.CompletedTask);
+            _userRepositoryMock.Setup(r => r.RemoverUsuario(usuario.Id)).Returns(Task.CompletedTask);
+
+            var result = await _controller.Delete(usuario.Id);
+            Assert.IsType<OkResult>(result);
+            var okResult = result as OkResult;
         }
 
         [Fact]

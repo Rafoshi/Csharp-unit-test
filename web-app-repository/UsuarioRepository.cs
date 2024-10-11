@@ -48,7 +48,6 @@ namespace web_app_repository
             await mySqlConnection.ExecuteAsync(sql, usuario);
             await mySqlConnection.CloseAsync();
 
-
             string key = "getusuario";
             redis = ConnectionMultiplexer.Connect("localhost:6379");
             IDatabase db = redis.GetDatabase();
